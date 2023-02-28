@@ -13,11 +13,11 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
 class BlueService : Service() {
-    lateinit var blueUtil:IBlueUtil
+    lateinit var blueUtil: IBlueUtil
     val blueBinder: IBinder = BlueBinder()
     override fun onCreate() {
         super.onCreate()
-        blueUtil=BlueSelfUtil(applicationContext)
+        blueUtil = BlueSelfUtil(applicationContext)
         createNotification()
     }
 
@@ -25,6 +25,7 @@ class BlueService : Service() {
 
         return super.onStartCommand(intent, flags, startId)
     }
+
     lateinit var notificationManager: NotificationManager
     lateinit var builder: NotificationCompat.Builder
     private fun createNotification() { //TODO
@@ -67,11 +68,16 @@ class BlueService : Service() {
         val nofication = builder.build()
         startForeground(1, nofication)
     }
+
     override fun onBind(p0: Intent?): IBinder? {
         return blueBinder
     }
-    suspend fun scan() :Flow<String> = blueUtil.scan()
 
+    val blueDeviceList = flow {
+        blueUtil.blueDeviceList.collect {
+            emit(it)
+        }
+    }
 
     inner class BlueBinder : Binder() {
         fun getService(): BlueService {

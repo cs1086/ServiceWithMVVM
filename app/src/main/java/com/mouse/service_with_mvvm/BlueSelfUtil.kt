@@ -20,12 +20,21 @@ class BlueSelfUtil(context: Context) : IBlueUtil {
     private var mBluetoothManager: BluetoothManager? = null
     private var mBluetoothAdapter: BluetoothAdapter? = null
     var bluetoothLeScanner: BluetoothLeScanner? = null
+    override val blueDeviceList = flow {
+        println("####blueutil.scan")
+        locationsSource.collect {
+            println("####scan.collect.it=$it")
+            emit(it)
+        }
+        println("####blueutil.scan2")
+    }
 
     init {
         mBluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         mBluetoothAdapter = mBluetoothManager!!.adapter
         bluetoothLeScanner = mBluetoothAdapter!!.bluetoothLeScanner
     }
+
     @SuppressLint("MissingPermission")
     val locationsSource: Flow<String> = callbackFlow<String> {
         val scanCallback = object : ScanCallback() {
@@ -51,17 +60,17 @@ class BlueSelfUtil(context: Context) : IBlueUtil {
 
         }
     }
-    @SuppressLint("MissingPermission")
-    override suspend fun scan(): Flow<String> {
-        return flow<String> {
-            println("####blueutil.scan")
-            locationsSource.collect {
-                println("####scan.collect.it=$it")
-                emit(it)
-            }
-            println("####blueutil.scan2")
-        }
-    }
+//    @SuppressLint("MissingPermission")
+//    override suspend fun scan(): Flow<String> {
+//        return flow<String> {
+//            println("####blueutil.scan")
+//            locationsSource.collect {
+//                println("####scan.collect.it=$it")
+//                emit(it)
+//            }
+//            println("####blueutil.scan2")
+//        }
+//    }
 
     override suspend fun connect() {
         TODO("Not yet implemented")

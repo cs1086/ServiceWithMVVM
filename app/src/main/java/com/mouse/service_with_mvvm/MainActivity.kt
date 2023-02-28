@@ -84,7 +84,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(viewModel: MainViewModel) {
-    val deviceList by viewModel.blueDeviceList.collectAsState()
+    val device by viewModel.blueDeviceList.collectAsState()
     Column {
         Button(onClick = {
             println("####onClick")
@@ -94,16 +94,16 @@ fun Greeting(viewModel: MainViewModel) {
         }) {
             Text("掃描", fontSize = 40.sp)
         }
-        LazyColumn {
-            items(deviceList.size) { index ->
-                println("####mainactivity")
-                Text(
-                    deviceList[index],
-                    fontSize = 40.sp,
-                    color = Color.Black
-                )
-            }
-        }
+//        LazyColumn {
+//            items(device.size) { index ->
+//                println("####mainactivity")
+//                Text(
+//                    device[index],
+//                    fontSize = 40.sp,
+//                    color = Color.Black
+//                )
+//            }
+//        }
 
 
     }
